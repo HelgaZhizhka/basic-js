@@ -24,28 +24,35 @@ const { NotImplementedError } = require('../extensions/index.js')
  * ]
  */
 function minesweeper(matrix) {
-  let colNum = matrix.length
-  for (let row = 0; row < colNum; row++) {
-    for (let column = 0; column < matrix[row].length; column++) {
-      let sum = 0,
-        rowLength = matrix[row].length
-      if (row - 1 >= 0 && column - 1 >= 0) {
-        if (matrix[row - 1][column - 1]) sum++
+  const result = []
+
+  for (let i = 0; i < matrix.length; i++) {
+    const row = []
+    for (let j = 0; j < matrix[i].length; j++) {
+      let minesCount = 0
+      for (let x = -1; x <= 1; x++) {
+        for (let y = -1; y <= 1; y++) {
+          if (x !== 0 || y !== 0) {
+            const newX = i + x
+            const newY = j + y
+            if (
+              newX >= 0 &&
+              newX < matrix.length &&
+              newY >= 0 &&
+              newY < matrix[i].length &&
+              matrix[newX][newY]
+            ) {
+              minesCount++
+            }
+          }
+        }
       }
-      if (row - 1 >= 0) {
-        if (matrix[row - 1][column]) sum++
-      }
-      if (column - 1 >= 0 && row + 1 <= colNum) {
-        if (matrix[row - 1][column + 1]) sum++
-      }
-      if (row - 1 >= 0) {
-        if (matrix[row - 1][column]) sum++
-      }
-      if (row + 1 <= colNum) {
-        if (matrix[row - 1][column + 1]) sum++
-      }
+      row.push(minesCount)
     }
+    result.push(row)
   }
+
+  return result
 }
 
 module.exports = {
